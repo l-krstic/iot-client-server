@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #define DESC_MAX_SIZE 150
 #define ARRAY_OF_VALUES_SIZE 101
