@@ -1,3 +1,7 @@
+# Binaries
+app_client
+app_server
+
 # Prerequisites
 *.d
 

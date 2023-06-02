@@ -3,8 +3,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
-
 
 #define DESC_MAX_SIZE 150
 #define ARRAY_OF_VALUES_SIZE 101
@@ -15,12 +15,13 @@
 #define DESC_TOO_LONG 2
 #define RADIAN_INC_FACTOR 0.0628
 
+
 typedef struct client
 {
 	int n;
 	char about[DESC_MAX_SIZE];
 	float value[ARRAY_OF_VALUES_SIZE];
-};
+} client;
 
 // Initialize client data
 void initialize_client(struct client *my_client);

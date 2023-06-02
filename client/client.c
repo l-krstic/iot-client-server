@@ -21,11 +21,11 @@ void initialize_client(struct client *my_client)
     // Initialize client: n
     int n = -1;
     printf("n> ");
-    scanf_s("%d", &n);
+    scanf("%d", &n);
     while (n < MIN_N_VALUE || n > MAX_N_VALUE) {
         printf("Invalid value for n, try again...\n");
         printf("n = ");
-        scanf_s("%d", &n);
+        scanf("%d", &n);
     }
     my_client->n = n;
 
