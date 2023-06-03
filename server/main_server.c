@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <time.h>
-#include <unistd.h>
-
+#include "server.h"
 
 #define LOCAL_IP "192.168.1.178"
 #define BUFF_LEN 150
@@ -61,6 +52,10 @@ int main()
 	}
 	len = sizeof(cli);
    
+
+
+
+    /*
     // Accept the data packet from client and verification
     connfd = accept(sockfd, (SA*)&cli, &len);
     if (connfd < 0) {
@@ -70,6 +65,7 @@ int main()
     else {
         printf("Server accept the client...\n");
 	}
+
 
 
 
@@ -87,12 +83,38 @@ int main()
     for (int i = 0; i < 100; i++) {
         bzero(buff, BUFF_LEN);
         read(connfd, buff, sizeof(buff));
-        printf("From client[sin() value]: %s\n", buff);
+        printf("From client[value(%i)]: %s\n", i+1, buff);
     }
+    */
+
+
+
+	// Server struct initialization
+	struct server my_server;
+    int num_of_clients = -1;
+    printf("num_of_clients> ");
+    scanf("%d", &num_of_clients);
+    while (num_of_clients < MIN_N_VALUE || num_of_clients > MAX_N_VALUE) {
+        printf("Invalid value for n, try again...\n");
+        printf("n = ");
+        scanf("%d", &num_of_clients);
+    }
+    my_server.num_of_clients = num_of_clients;
+
+
+
+    pthread_t thread_id;
+    // Create 'num_of_clients' threads
+    for (int i = 0; i < num_of_clients; i++)
+        pthread_create(&thread_id, NULL, thread_func, (void *)&thread_id);
+  
+    pthread_exit(NULL);
 
 
 
 
+	// Close the socket
+    close(sockfd);
 
 	return 0;
 }

@@ -4,7 +4,7 @@ SERVER_SRC=server/server.c server/main_server.c
 SERVER_APP=app_server
 
 CFLAGS=-Wall
-LDFLAGS=-lm
+LDFLAGS=-lm -pthread
 GCC=gcc
 
 default:
