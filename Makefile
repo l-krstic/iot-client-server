@@ -7,9 +7,6 @@ CFLAGS=-Wall
 LDFLAGS=-lm -pthread
 GCC=gcc
 
-default:
-	@echo "Choose target!";
-
 all:
 	${GCC} ${CFLAGS} ${CLIENT_SRC} -o ${CLIENT_APP} ${LDFLAGS}
 	${GCC} ${CFLAGS} ${SERVER_SRC} -o ${SERVER_APP} ${LDFLAGS}
