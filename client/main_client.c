@@ -60,13 +60,13 @@ int main()
 	clock_t before = clock();
 	char buff[BUFF_LEN];
 
-	// Send client description to server
-	bzero(buff, sizeof(buff));
-	sprintf(buff, "%s", my_client.about);
-	write(sockfd, buff, sizeof(buff));
 	// Send n-number to server
 	bzero(buff, sizeof(buff));
 	sprintf(buff, "%d", my_client.n);
+	write(sockfd, buff, sizeof(buff));
+	// Send client description to server
+	bzero(buff, sizeof(buff));
+	sprintf(buff, "%s", my_client.about);
 	write(sockfd, buff, sizeof(buff));
 
 	// Send sin()-data to server

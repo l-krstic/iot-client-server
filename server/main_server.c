@@ -1,24 +1,20 @@
 #include "server.h"
 
-#define LOCAL_IP "192.168.1.178"
-#define BUFF_LEN 150
-#define PORT 8080
-#define SA struct sockaddr
-
 
 int main()
 {
 	printf("------- IoT SERVER APPLICATION -------\n");
 
     // Socket create and verification
-	int sockfd;
-	int connfd;
-	unsigned int len;
-    struct sockaddr_in servaddr, cli;
+	int sockfd = -1;
+	int connfd = -1;
+	unsigned int len = 0;
+    struct sockaddr_in servaddr;
+    struct sockaddr_in cli;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
-        printf("Socket creation failed...\n");
+        printf("Socket creation failed!\n");
         exit(0);
     }
     else {
@@ -27,6 +23,7 @@ int main()
 
 	// Initilize with zeros
 	bzero(&servaddr, sizeof(servaddr));
+    bzero(&cli, sizeof(cli));
    
     // Sign IP, PORT
     servaddr.sin_family = AF_INET;
@@ -35,83 +32,62 @@ int main()
    
     // Binding newly created socket to given IP and verification
     if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) {
-        printf("Socket bind failed...\n");
+        printf("Socket bind failed!\n");
         exit(0);
     }
     else {
-        printf("Socket successfully binded..\n");
+        printf("Socket successfully binded...\n");
 	}
 
     // Now server is ready to listen and verification
     if ((listen(sockfd, 5)) != 0) {
-        printf("Listen failed...\n");
+        printf("Listening failed!\n");
         exit(0);
     }
     else {
-        printf("Server listening..\n");
+        printf("Server listening...\n");
 	}
 	len = sizeof(cli);
-   
-
-
-
-    /*
-    // Accept the data packet from client and verification
-    connfd = accept(sockfd, (SA*)&cli, &len);
-    if (connfd < 0) {
-        printf("Server accept failed...\n");
-        exit(0);
-    }
-    else {
-        printf("Server accept the client...\n");
-	}
-
-
-
-
-
-    // Read client description
-    char buff[BUFF_LEN];
-    bzero(buff, BUFF_LEN);
-    read(connfd, buff, sizeof(buff));
-    printf("From client[description]: %s\n", buff);
-    // Read client n-number
-    bzero(buff, BUFF_LEN);
-    read(connfd, buff, sizeof(buff));
-    printf("From client[n]: %s\n", buff);
-    // Read client sin()-value
-    for (int i = 0; i < 100; i++) {
-        bzero(buff, BUFF_LEN);
-        read(connfd, buff, sizeof(buff));
-        printf("From client[value(%i)]: %s\n", i+1, buff);
-    }
-    */
-
-
 
 	// Server struct initialization
 	struct server my_server;
     int num_of_clients = -1;
-    printf("num_of_clients> ");
+    printf("Number of clients> ");
     scanf("%d", &num_of_clients);
     while (num_of_clients < MIN_N_VALUE || num_of_clients > MAX_N_VALUE) {
-        printf("Invalid value for n, try again...\n");
-        printf("n = ");
+        printf("Invalid value for n, try again!\n");
+        printf("Number of clients> ");
         scanf("%d", &num_of_clients);
     }
+    // Assign number of clients in server struct
     my_server.num_of_clients = num_of_clients;
 
-
-
-    pthread_t thread_id;
-    // Create 'num_of_clients' threads
+    // Initialize array of clients n's
     for (int i = 0; i < num_of_clients; i++)
-        pthread_create(&thread_id, NULL, thread_func, (void *)&thread_id);
-  
-    pthread_exit(NULL);
+        my_server.clients[i] = i + 1;
+
+    // Create 'num_of_clients' threads
+    pthread_t thread_id[MAX_THREADS];
+    for (int i = 0; i < num_of_clients; i++) {
+        client_args *args = malloc(sizeof *args);
+        args->cli = cli;
+        args->connfd = connfd;
+        args->len = len;
+        args->sockfd = sockfd;
+        args->client_num = my_server.clients[i];
+        
+        if(pthread_create(&thread_id[i], NULL, thread_func, args)) {
+            free(args);
+            printf("Error creating thread number [%d]!\n", i+1);
+            goto thread_error;
+        }
+    }
 
 
+thread_error:
 
+    for (int i = 0; i < num_of_clients; i++)
+        pthread_join(thread_id[i],NULL);
 
 	// Close the socket
     close(sockfd);
