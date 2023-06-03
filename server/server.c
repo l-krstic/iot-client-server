@@ -56,6 +56,10 @@ void *thread_func(void *args)
         read(connfd, buff, sizeof(buff));
         fprintf(fp, "%s\n", buff);
     }
+    float last_value = 0.000000;
+    bzero(buff, BUFF_LEN);
+    sprintf(buff, "%f", last_value);
+    fprintf(fp, "%s", buff);
 
     // Close the file
     fclose(fp);
