@@ -10,6 +10,7 @@ GCC=gcc
 all:
 	${GCC} ${CFLAGS} ${CLIENT_SRC} -o ${CLIENT_APP} ${LDFLAGS}
 	${GCC} ${CFLAGS} ${SERVER_SRC} -o ${SERVER_APP} ${LDFLAGS}
+	-rm -rf output/client*
 
 clean:
 	@if test -f "${CLIENT_APP}"; then \
@@ -18,4 +19,4 @@ clean:
 	@if test -f "${SERVER_APP}"; then \
 		rm -f ${SERVER_APP};\
 	fi
-	-rm -f *.o
+	-rm -rf *.o

@@ -61,6 +61,9 @@ void *thread_func(void *args)
     sprintf(buff, "%f", last_value);
     fprintf(fp, "%s", buff);
 
+    printf("Data writen to client %s, in file: %s\n",
+            filename_2, filename);
+
     // Close the file
     fclose(fp);
     // Deallocate resources
