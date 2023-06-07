@@ -20,6 +20,10 @@ int main()
 {
 	printf("------- IoT CLIENT APPLICATION -------\n\n");
 
+	// For calculating time that client spends running
+	int program_msec = 0;
+	clock_t program_before = clock();
+
 	// Client struct initialization
 	struct client my_client;
 	initialize_client(&my_client);
@@ -88,6 +92,14 @@ int main()
 
 	// Close the socket
     close(sockfd);
+
+	// Calculating time spent
+	clock_t program_after = clock() - program_before;
+	program_msec = program_after * 1000 / CLOCKS_PER_SEC;
+	program_msec *= 100; // scaling
+
+	printf("Client program execution took %d seconds and %d milliseconds!\n",
+			program_msec/1000, program_msec%1000);
 
 	return 0;
 }

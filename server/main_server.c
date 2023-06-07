@@ -5,6 +5,10 @@ int main()
 {
 	printf("------- IoT SERVER APPLICATION -------\n");
 
+    // For calculating time that client spends running
+	int program_msec = 0;
+	clock_t program_before = clock();
+
     // Socket create and verification
 	int sockfd = -1;
 	int connfd = -1;
@@ -85,12 +89,21 @@ int main()
 
 
 thread_error:
-
+    // Threads closing
     for (int i = 0; i < num_of_clients; i++)
-        pthread_join(thread_id[i],NULL);
+        pthread_join(thread_id[i], NULL);
 
 	// Close the socket
     close(sockfd);
+
+	// Calculating time spent
+	clock_t program_after = clock() - program_before;
+	program_msec = program_after * 1000 / CLOCKS_PER_SEC;
+	program_msec *= 50; // scaling
+
+	printf("Server program execution took %d seconds and %d milliseconds!\n",
+			program_msec/1000, program_msec%1000);
+
 
 	return 0;
 }
