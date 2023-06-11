@@ -99,7 +99,7 @@ thread_error:
 	// Calculating time spent
 	clock_t program_after = clock() - program_before;
 	program_msec = program_after * 1000 / CLOCKS_PER_SEC;
-	program_msec *= 50; // scaling
+	program_msec *= 100; // scaling
 
 	printf("Server program execution took %d seconds and %d milliseconds!\n",
 			program_msec/1000, program_msec%1000);
